@@ -43,7 +43,25 @@ int get_required_pp(Player player)//Samet
 
 int is_player_in_range(Player p_reference,Player p_target)//Samet
 {
-  
+  int coordinate_x= abs(p_reference->Coordinate_X-p_target->Coordinate_X);
+  int coordinate_y= abs(p_reference->Coordinate_Y-p_target->Coordinate_Y);
+  double distance=sqrt(pow((double)coordinate_x,(double)2)+pow((double)coordinate_y,(double)2));
+  if(properties->jump_count==0)
+  {
+    if(distance <= properties->initial_range)
+    {
+      return 1;
+    }
+    return 0;
+  }
+  else
+  {
+    if(distance <= properties->jump_range)
+    {
+      return 1;
+    }
+    return 0;
+  }
 }
 
 Dllist all_players_in_range(Player p_reference)//Samet
