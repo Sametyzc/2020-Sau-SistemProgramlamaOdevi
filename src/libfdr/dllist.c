@@ -3,10 +3,10 @@
 #include "dllist.h"
 
 /*---------------------------------------------------------------------*
- * PROCEDURES FOR MANIPULATING DOUBLY LINKED LISTS 
- * Each list contains a sentinal node, so that     
- * the first item in list l is l->flink.  If l is  
- * empty, then l->flink = l->blink = l.            
+ * PROCEDURES FOR MANIPULATING DOUBLY LINKED LISTS
+ * Each list contains a sentinal node, so that
+ * the first item in list l is l->flink.  If l is
+ * empty, then l->flink = l->blink = l.
  *---------------------------------------------------------------------*/
 
 Dllist new_dllist()
@@ -18,7 +18,7 @@ Dllist new_dllist()
   d->blink = d;
   return d;
 }
- 
+
 dll_insert_b(Dllist node, Jval v)       /* Inserts before a given node */
 {
   Dllist newnode;
@@ -72,4 +72,3 @@ Jval dll_val(Dllist l)
 {
   return l->val;
 }
-

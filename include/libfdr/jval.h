@@ -21,7 +21,7 @@ typedef union {
     float farray[2];
     char carray[8];
     unsigned char ucarray[8];
-  } Jval;  
+  } Jval;
 
 extern Jval new_jval_i(int);
 extern Jval new_jval_l(long);
