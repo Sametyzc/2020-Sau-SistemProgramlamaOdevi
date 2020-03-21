@@ -7,7 +7,6 @@
 #include <math.h>
 #include "dllist.h"
 #include "fields.h"
-#include "jval.h"
 
 typedef struct player_struct {
   int Coordinate_X;
@@ -29,6 +28,15 @@ typedef struct input_struct {
   int jump_count; /*Her sicramada bir artirilacak degisken*/
 } *Properties;
 
+//Argumanlari tutan global degisken
+extern Properties properties;
+
+//Butun oyuncuları tutan global liste
+extern Dllist allPlayers;
+
+//Yapilan toplam iyilestirmeyi tutan global deger
+int totalHealing;
+
 //Verilen node icerisindeki player_structi dondurur.
 #define Get_Player_In_Node(node) (((Player)jval_v(node->val)))
 
@@ -43,15 +51,6 @@ typedef struct input_struct {
 
 //Verilen playeri jvala donunturur
 #define Player_to_Jval(Player) (new_jval_v(Player))
-
-//Argumanlari tutan global degisken
-extern Properties properties;
-
-//Butun oyuncuları tutan global liste
-extern Dllist allPlayers;
-
-//Yapilan toplam iyilestirmeyi tutan global deger
-int totalHealing;
 
 /*
 Parametre olarak aldığı IS içerisinden okuyacağı oyuncu bilgilerini
@@ -69,13 +68,13 @@ Properties global degiskenine set eden fonksiyon
 extern void set_properties(Properties);//Kubra
 
 /*
- Argumanlar okunduktan sonra malloc ile properties structi olusturan fonksiyon
- return olusturulan properties dondurulur
- 1.Parametre initial_range
- 2.Parametre jump_range
- 3.Parametre num_jumps
- 4.Parametre initial_power
- 5.Parametre power_reduction
+Argumanlar okunduktan sonra malloc ile properties structi olusturan fonksiyon
+return olusturulan properties dondurulur
+1.Parametre initial_range
+2.Parametre jump_range
+3.Parametre num_jumps
+4.Parametre initial_power
+5.Parametre power_reduction
 */
 extern Properties create_properties(int,int,int,int,int);//Kubra
 
@@ -85,13 +84,13 @@ dosya okunduktan sonra allPlayers global degiskenini set eden fonksiyon
 extern void set_allPlayers();//Kubra
 
 /*
-  Verilen parametrelere uygun olarak player olusturup donduren fonksiyon
-  1.Parametre Coordinate_X
-  2.Parametre Coordinate_Y
-  3.Parametre Current_PP
-  4.Parametre Max_PP
-  5.Parametre Name
-  6.Parametre Turn
+Verilen parametrelere uygun olarak player olusturup donduren fonksiyon
+1.Parametre Coordinate_X
+2.Parametre Coordinate_Y
+3.Parametre Current_PP
+4.Parametre Max_PP
+5.Parametre Name
+6.Parametre Turn
 */
 extern Player create_player(int,int,int,int,char[],int);//Samet
 
@@ -133,6 +132,27 @@ Oyun boyunca yapilan toplam iyilestirmeyi tutan totalHealing degerini iyilestirm
 1.Parametre totalHealing e eklenecek olan deger
 */
 extern void update_totalHealing(int);//Yoruk
+
+/*
+Parametre olarak gonderilen oyuncunun heapteki alanlarini ve kendisini serbest birakan fonksiyon
+*/
+extern void free_player(Player);//Kubra
+
+/*
+global degisken olan allPlayers listesinin icerisindeki playerlari ve en son listeyi serbest birakan fonksiyon
+*/
+extern void free_allPlayers();//Kubra
+
+/*
+global degisken olan properties structini serbest birakan fonksiyon
+*/
+extern void free_properties();//Kubra
+
+/*
+oyun kutuphanesi iceriside heapte olusturulmus her seyi serbest birakan fonksiyon
+diger free fonksiyonlari bunun icerisinde cagirilabilir
+*/
+extern void free_oyun();//Kubra
 
 
 #endif

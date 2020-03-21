@@ -1,5 +1,5 @@
-#ifndef _FIELDS_ 
-#define _FIELDS_ 
+#ifndef _FIELDS_
+#define _FIELDS_
 
 /* The fields library -- making input processing easier */
 
@@ -25,6 +25,6 @@ extern IS new_inputstruct(/* FILENAME -- NULL for stdin */);
 extern IS pipe_inputstruct(/* COMMAND -- NULL for stdin */);
 extern int get_line(/* IS */); /* returns NF, or -1 on EOF.  Does not
                                   close the file */
-extern void jettison_inputstruct(/* IS */);  /* frees the IS and fcloses 
+extern void jettison_inputstruct(/* IS */);  /* frees the IS and fcloses
                                                 the file */
 #endif
