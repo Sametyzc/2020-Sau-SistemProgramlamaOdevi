@@ -23,7 +23,7 @@ typedef struct input_struct {
   int jump_range;
   int num_jumps;
   int initial_power;
-  int power_reduction;
+  double power_reduction;
   int current_power;/*Sahip olunan suanki guc baslangicta initial_power a esit olmali*/
   int jump_count; /*Her sicramada bir artirilacak degisken*/
 } *Properties;
@@ -59,7 +59,7 @@ listeyi donduren fonksiyon
 1.Parametre Dosyayı iceren fields.h in icerisindeki IS structi
 return Butun playerlari iceren Dllist
 */
-extern Dllist read_file(IS);//Kubra
+extern Dllist read_file();//Kubra
 
 /*
 Properties global degiskenine set eden fonksiyon
@@ -76,7 +76,7 @@ return olusturulan properties dondurulur
 4.Parametre initial_power
 5.Parametre power_reduction
 */
-extern Properties create_properties(int,int,int,int,int);//Kubra
+extern Properties create_properties(int,int,int,int,double);//Kubra
 
 /*
 dosya okunduktan sonra allPlayers global degiskenini set eden fonksiyon
