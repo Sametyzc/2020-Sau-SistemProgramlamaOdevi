@@ -136,23 +136,23 @@ extern void update_totalHealing(int);//Yoruk
 /*
 Parametre olarak gonderilen oyuncunun heapteki alanlarini ve kendisini serbest birakan fonksiyon
 */
-extern void free_player(Player);//Kubra
+extern void free_player(Player);//Alperen
 
 /*
 global degisken olan allPlayers listesinin icerisindeki playerlari ve en son listeyi serbest birakan fonksiyon
 */
-extern void free_allPlayers();//Kubra
+extern void free_allPlayers();//Alperen
 
 /*
 global degisken olan properties structini serbest birakan fonksiyon
 */
-extern void free_properties();//Kubra
+extern void free_properties();//Alperen
 
 /*
 oyun kutuphanesi iceriside heapte olusturulmus her seyi serbest birakan fonksiyon
 diger free fonksiyonlari bunun icerisinde cagirilabilir
 */
-extern void free_oyun();//Kubra
+extern void free_oyun();//Alperen
 
 
 #endif

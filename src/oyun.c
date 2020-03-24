@@ -98,22 +98,22 @@ void update_totalHealing(int value)//Yoruk
 
 }
 
-void free_player(Player player)//Kubra
+void free_player(Player player)//Alperen
 {
 
 }
 
-void free_allPlayers()//Kubra
+void free_allPlayers()//Alperen
 {
 
 }
 
-void free_properties()//Kubra
+void free_properties()//Alperen
 {
 
 }
 
-void free_oyun()//Kubra
+void free_oyun()//Alperen
 {
 
 }
