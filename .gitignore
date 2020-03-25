@@ -3,3 +3,4 @@ bin/program
 *.o
 *.o
 bin/program
+*.o
