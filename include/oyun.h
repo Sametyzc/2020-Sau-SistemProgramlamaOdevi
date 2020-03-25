@@ -52,6 +52,8 @@ int totalHealing;
 //Verilen playeri jvala donunturur
 #define Player_to_Jval(Player) (new_jval_v(Player))
 
+//Lokman Hekim'e en yakın insanı getirir.
+#define Get_Closest_Person() (Get_Player_In_Node(dll_first( all_players_in_range(Get_Player_In_Node(dll_first(allPlayers))))))
 /*
 Parametre olarak aldığı IS içerisinden okuyacağı oyuncu bilgilerini
 kullanarak Player olusturup bu playerleri bir listeye ekleyip
@@ -115,6 +117,17 @@ return range deki playerlari iceren Dllist
 extern Dllist all_players_in_range(Player);//Samet
 
 /*
+Kullanıcıya en  yakın kullanıcıların listesini döndüren fonksiyon
+1.Parametre Referans player
+return range deki playerlari iceren Dllist
+*/
+extern Dllist closest_players_in_range(Player);//Samet 
+/*
+İyileştirmenin en verimli olduğu yolu bulan fonksiyon
+*/
+extern void find_best_way();//Yoruk
+
+/*
 playeri Properties goz onune alinarak iyitestiren fonksiyon
 1.Parametre iyilestirme yapilacak player
 iyilestirme yapildiktan sonra properties degerleri guncellenmeli
@@ -131,7 +144,7 @@ extern void update_power();//Yoruk
 Oyun boyunca yapilan toplam iyilestirmeyi tutan totalHealing degerini iyilestirme yaptiktan sonra update eden fonksiyon
 1.Parametre totalHealing e eklenecek olan deger
 */
-extern void update_totalHealing(int);//Yoruk
+extern void update_totalHealing(int,int);//Yoruk
 
 /*
 Parametre olarak gonderilen oyuncunun heapteki alanlarini ve kendisini serbest birakan fonksiyon

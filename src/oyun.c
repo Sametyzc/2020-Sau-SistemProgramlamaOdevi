@@ -3,7 +3,7 @@
 Properties properties;
 Dllist allPlayers;
 
-Dllist read_file()//Kubra
+Dllist read_file()	//Kubra
 {
 	printf("--Dosya okunmaya baslandi!\n\n");
 	allPlayers = new_dllist();
@@ -14,16 +14,16 @@ Dllist read_file()//Kubra
 		perror("Dosya okunurken hata olustu!");
 		exit(1);
 	}
-	while(get_line(is) > 0)
+	while (get_line(is) > 0)
 	{
 		Player new_player;
-		if(strcmp(is->fields[4],"Lokman_Hekim"))
+		if (strcmp(is->fields[4], "Lokman_Hekim"))
 		{
-			new_player=create_player(atoi(is->fields[0]),atoi(is->fields[1]),atoi(is->fields[2]),atoi(is->fields[3]),is->fields[4],0);
+			new_player = create_player(atoi(is->fields[0]), atoi(is->fields[1]), atoi(is->fields[2]), atoi(is->fields[3]), is->fields[4], 0);
 		}
 		else
 		{
-			new_player=create_player(atoi(is->fields[0]),atoi(is->fields[1]),atoi(is->fields[2]),atoi(is->fields[3]),is->fields[4],1);
+			new_player = create_player(atoi(is->fields[0]), atoi(is->fields[1]), atoi(is->fields[2]), atoi(is->fields[3]), is->fields[4], 1);
 		}
 		dll_append(allPlayers, new_jval_v(new_player));
 	}
@@ -32,39 +32,38 @@ Dllist read_file()//Kubra
 	return allPlayers;
 }
 
-Properties create_properties(int initialRange,int jumpRange,int numJumps,int initialPower,double powerReduction)//Kubra
+Properties create_properties(int initialRange, int jumpRange, int numJumps, int initialPower, double powerReduction)	//Kubra
 {
-	properties = (struct input_struct*) malloc (1* sizeof(struct input_struct));
-	properties->initial_range=initialRange;
-	properties->jump_range=jumpRange;
-	properties->num_jumps=numJumps;
-	properties->initial_power=initialPower;
-	properties->power_reduction=powerReduction;
-	properties->current_power=initialPower;
-	properties->jump_count=0;
+	properties = (struct input_struct *) malloc(1* sizeof(struct input_struct));
+	properties->initial_range = initialRange;
+	properties->jump_range = jumpRange;
+	properties->num_jumps = numJumps;
+	properties->initial_power = initialPower;
+	properties->power_reduction = powerReduction;
+	properties->current_power = initialPower;
+	properties->jump_count = 0;
 
 	printf("-Properties degerleri ->\n");
-	printf("initial range : %d \n",properties->initial_range);
-	printf("jump_range : %d \n",properties->jump_range);
-	printf("num_jumps : %d \n",properties->num_jumps);
-	printf("initial_power : %d \n",properties->initial_power);
-	printf("power_reduction : %lf \n",properties->power_reduction);
+	printf("initial range : %d \n", properties->initial_range);
+	printf("jump_range : %d \n", properties->jump_range);
+	printf("num_jumps : %d \n", properties->num_jumps);
+	printf("initial_power : %d \n", properties->initial_power);
+	printf("power_reduction : %lf \n", properties->power_reduction);
 	printf("--properties global degiskenine atama yapildi!\n\n");
 
 	return properties;
 }
 
-Player create_player(int coordinate_x,int coordinate_y,int current_pp,int max_pp,char* name,int turn)//Samet
+Player create_player(int coordinate_x, int coordinate_y, int current_pp, int max_pp, char *name, int turn)	//Samet
 {
 	Player new_player;
 	new_player = Malloc_Player();
 	new_player->Coordinate_X = coordinate_x;
-	new_player->Coordinate_Y =coordinate_y;
+	new_player->Coordinate_Y = coordinate_y;
 	new_player->Current_PP = current_pp;
 	new_player->Max_PP = max_pp;
 	new_player->Name = strdup(name);
 	new_player->Turn = turn;
-
 	printf("-Yeni player degerleri ->\n");
 	printf("Name: %s\n", new_player->Name);
 	printf("Coordinate_X: %d\n", new_player->Coordinate_X);
@@ -77,19 +76,19 @@ Player create_player(int coordinate_x,int coordinate_y,int current_pp,int max_pp
 	return new_player;
 }
 
-int get_required_pp(Player player)//Samet
+int get_required_pp(Player player)	//Samet
 {
-	return ((player->Max_PP)-(player->Current_PP));
+	return ((player->Max_PP) - (player->Current_PP));
 }
 
-int is_player_in_range(Player p_reference,Player p_target)//Samet
+int is_player_in_range(Player p_reference, Player p_target)	//Samet
 {
-	int coordinate_x = abs(p_reference->Coordinate_X-p_target->Coordinate_X);
-	int coordinate_y = abs(p_reference->Coordinate_Y-p_target->Coordinate_Y);
-	double distance = sqrt(pow((double)coordinate_x,(double)2)+pow((double)coordinate_y,(double)2));
-	if(properties->jump_count==0)
+	int coordinate_x = abs(p_reference->Coordinate_X - p_target->Coordinate_X);
+	int coordinate_y = abs(p_reference->Coordinate_Y - p_target->Coordinate_Y);
+	double distance = sqrt(pow((double) coordinate_x, (double) 2) + pow((double) coordinate_y, (double) 2));
+	if (properties->jump_count == 0)
 	{
-		if(distance <= properties->initial_range)
+		if (distance <= properties->initial_range)
 		{
 			return 1;
 		}
@@ -97,7 +96,7 @@ int is_player_in_range(Player p_reference,Player p_target)//Samet
 	}
 	else
 	{
-		if(distance <= properties->jump_range)
+		if (distance <= properties->jump_range)
 		{
 			return 1;
 		}
@@ -105,18 +104,18 @@ int is_player_in_range(Player p_reference,Player p_target)//Samet
 	}
 }
 
-Dllist all_players_in_range(Player p_reference)//Samet
+Dllist all_players_in_range(Player p_reference)	//Samet
 {
 	Dllist itr;
 	Dllist playersList = new_dllist();
 	dll_traverse(itr, allPlayers)
 	{
 		Player itr_player = Get_Player_In_Node(itr);
-		if(is_player_in_range(p_reference,itr_player)==1)
+		if (is_player_in_range(p_reference, itr_player) == 1)
 		{
-			if(strcmp(p_reference->Name, itr_player->Name) !=0)
+			if (strcmp(p_reference->Name, itr_player->Name) != 0)
 			{
-				dll_append(playersList,itr->val);
+				dll_append(playersList, itr->val);
 			}
 		}
 	}
@@ -124,37 +123,65 @@ Dllist all_players_in_range(Player p_reference)//Samet
 	return playersList;
 }
 
-void heal_player(Player player)//Yoruk
+int chainCounter = 0;
+int way_one = 0, way_two = 0;
+int temp_current_power = 0;
+
+void find_best_way()	//Yoruk
 {
+	Dllist ptr;
+	/* dll_traverse(ptr,all_players_in_range(Get_Player_In_Node(dll_first(allPlayers->flink))))
+	{
+		//Lokman Hekim'in canı tam ise
+		if (Get_Player_In_Node(dll_first(allPlayers->flink))->Current_PP == Get_Player_In_Node(dll_first(allPlayers->flink))->Max_PP)
+		{
+			heal_player(Get_Closest_Person());
+		}
+		else
+		{
+			heal_player(Get_Player_In_Node(ptr));
+		}
+	}
+	printf("%d\n", way_one);
+	printf("%d\n", properties->current_power);
+	*/
 
 }
 
-void update_power()//Yoruk
+void heal_player(Player player)	//Yoruk
 {
+	if (chainCounter == 0)
+	{
+		if (player->Max_PP - player->Current_PP <= properties->initial_power)
+			update_totalHealing(player->Max_PP - player->Current_PP, 0);
+		else
+		{
 
+			update_totalHealing(properties->initial_power, 0);
+		}
+	}
+	else
+	{
+		update_power();
+		update_totalHealing(properties->current_power, 0);
+	}
 }
 
-void update_totalHealing(int value)//Yoruk
+void update_power()	//Yoruk
 {
-
+	properties->current_power = rint(properties->current_power *properties->power_reduction);
 }
 
-void free_player(Player player)//Alperen
+void update_totalHealing(int value, int value2)	//Yoruk
 {
-
+	way_one = +value;
+	way_two += value2;
 }
 
-void free_allPlayers()//Alperen
-{
+void free_player(Player player) {}	//Alperen
 
-}
+void free_allPlayers(){}	//Alperen 
 
-void free_properties()//Alperen
-{
+void free_properties(){}	//Alperen 
 
-}
-
-void free_oyun()//Alperen
-{
-
-}
+void free_oyun(){}	//Alperen 
