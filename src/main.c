@@ -7,9 +7,8 @@ Dllist allPlayers;
 
 int main(int argc, char **argv)
 {
-  create_properties(atoi(argv[1]),atoi(argv[2]),atoi(argv[3]),atoi(argv[4]),atof(argv[5]));
-  read_file();
-  find_best_way();/*
+	start_game(atoi(argv[1]),atoi(argv[2]),atoi(argv[3]),atoi(argv[4]),atof(argv[5]));
+  /*
   Dllist itr;
   int i=0;
   dll_traverse(itr,allPlayers)

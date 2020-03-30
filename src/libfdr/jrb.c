@@ -1,44 +1,3 @@
-/*
-Libraries for fields, doubly-linked lists and red-black trees.
-Copyright (C) 2001 James S. Plank
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
----------------------------------------------------------------------------
-Please see http://www.cs.utk.edu/~plank/plank/classes/cs360/360/notes/Libfdr/
-for instruction on how to use this library.
-
-Jim Plank
-plank@cs.utk.edu
-http://www.cs.utk.edu/~plank
-
-Associate Professor
-Department of Computer Science
-University of Tennessee
-203 Claxton Complex
-1122 Volunteer Blvd.
-Knoxville, TN 37996-3450
-
-     865-974-4397
-Fax: 865-974-4404
- */
-/* Revision 1.2.  Jim Plank */
-
-/* Original code by Jim Plank (plank@cs.utk.edu) */
-/* modified for THINK C 6.0 for Macintosh by Chris Bartley */
- 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,7 +11,7 @@ static void recolor(JRB n);
 static void single_rotate(JRB y, int l);
 static void jrb_print_tree(JRB t, int level);
 static void jrb_iprint_tree(JRB t, int level);
- 
+
 #define isred(n) (n->red)
 #define isblack(n) (!isred(n))
 #define isleft(n) (n->left)
@@ -75,19 +34,19 @@ static void jrb_iprint_tree(JRB t, int level);
 #define setext(n) n->internal = 0
 #define setnormal(n) n->roothead = 0
 #define sibling(n) ((isleft(n)) ? n->parent->blink : n->parent->flink)
- 
+
 static void insert(JRB item, JRB list)	/* Inserts to the end of a list */
 {
   JRB last_node;
- 
+
   last_node = list->blink;
- 
+
   list->blink = item;
   last_node->flink = item;
   item->blink = last_node;
   item->flink = list;
 }
- 
+
 static void delete_item(JRB item)		/* Deletes an arbitrary iterm */
 {
   item->flink->blink = item->blink;
@@ -102,11 +61,11 @@ static void delete_item(JRB item)		/* Deletes an arbitrary iterm */
   setblack(new);\
   setnormal(new);\
 }
- 
+
 static void mk_new_int(JRB l, JRB r, JRB p, int il)
 {
   JRB newnode;
- 
+
   newnode = (JRB) malloc(sizeof(struct jrb_node));
   setint(newnode);
   setred(newnode);
@@ -131,9 +90,9 @@ static void mk_new_int(JRB l, JRB r, JRB p, int il)
     p->blink = newnode;
   }
   recolor(newnode);
-}  
-  
-   
+}
+
+
 JRB lprev(JRB n)
 {
   if (ishead(n)) return n;
@@ -143,7 +102,7 @@ JRB lprev(JRB n)
   }
   return n->parent;
 }
- 
+
 JRB rprev(JRB n)
 {
   if (ishead(n)) return n;
@@ -153,11 +112,11 @@ JRB rprev(JRB n)
   }
   return n->parent;
 }
- 
+
 JRB make_jrb()
 {
   JRB head;
- 
+
   head = (JRB) malloc (sizeof(struct jrb_node));
   head->flink = head;
   head->blink = head;
@@ -166,11 +125,11 @@ JRB make_jrb()
   sethead(head);
   return head;
 }
- 
+
 JRB jrb_find_gte_str(JRB n, char *key, int *fnd)
 {
   int cmp;
- 
+
   *fnd = 0;
   if (!ishead(n)) {
     fprintf(stderr, "jrb_find_gte_str called on non-head 0x%x\n", n);
@@ -180,9 +139,9 @@ JRB jrb_find_gte_str(JRB n, char *key, int *fnd)
   cmp = strcmp(key, n->blink->key.s);
   if (cmp == 0) {
     *fnd = 1;
-    return n->blink; 
+    return n->blink;
   }
-  if (cmp > 0) return n; 
+  if (cmp > 0) return n;
   else n = n->parent;
   while (1) {
     if (isext(n)) return n;
@@ -194,7 +153,7 @@ JRB jrb_find_gte_str(JRB n, char *key, int *fnd)
     if (cmp < 0) n = n->flink ; else n = n->blink;
   }
 }
- 
+
 JRB jrb_find_str(JRB n, char *key)
 {
   int fnd;
@@ -202,7 +161,7 @@ JRB jrb_find_str(JRB n, char *key)
   j = jrb_find_gte_str(n, key, &fnd);
   if (fnd) return j; else return NULL;
 }
- 
+
 JRB jrb_find_gte_int(JRB n, int ikey, int *fnd)
 {
   *fnd = 0;
@@ -213,9 +172,9 @@ JRB jrb_find_gte_int(JRB n, int ikey, int *fnd)
   if (n->parent == n) return n;
   if (ikey == n->blink->key.i) {
     *fnd = 1;
-    return n->blink; 
+    return n->blink;
   }
-  if (ikey > n->blink->key.i) return n; 
+  if (ikey > n->blink->key.i) return n;
   else n = n->parent;
   while (1) {
     if (isext(n)) return n;
@@ -226,7 +185,7 @@ JRB jrb_find_gte_int(JRB n, int ikey, int *fnd)
     n = (ikey < getlext(n)->key.i) ? n->flink : n->blink;
   }
 }
- 
+
 JRB jrb_find_int(JRB n, int ikey)
 {
   int fnd;
@@ -235,7 +194,7 @@ JRB jrb_find_int(JRB n, int ikey)
   j = jrb_find_gte_int(n, ikey, &fnd);
   if (fnd) return j; else return NULL;
 }
- 
+
 JRB jrb_find_gte_dbl(JRB n, double dkey, int *fnd)
 {
   *fnd = 0;
@@ -246,9 +205,9 @@ JRB jrb_find_gte_dbl(JRB n, double dkey, int *fnd)
   if (n->parent == n) return n;
   if (dkey == n->blink->key.d) {
     *fnd = 1;
-    return n->blink; 
+    return n->blink;
   }
-  if (dkey > n->blink->key.d) return n; 
+  if (dkey > n->blink->key.d) return n;
   else n = n->parent;
   while (1) {
     if (isext(n)) return n;
@@ -259,7 +218,7 @@ JRB jrb_find_gte_dbl(JRB n, double dkey, int *fnd)
     n = (dkey < getlext(n)->key.d) ? n->flink : n->blink;
   }
 }
- 
+
 JRB jrb_find_dbl(JRB n, double dkey)
 {
   int fnd;
@@ -268,11 +227,11 @@ JRB jrb_find_dbl(JRB n, double dkey)
   j = jrb_find_gte_dbl(n, dkey, &fnd);
   if (fnd) return j; else return NULL;
 }
- 
+
 JRB jrb_find_gte_gen(JRB n, Jval key,int (*fxn)(Jval, Jval), int *fnd)
 {
   int cmp;
- 
+
   *fnd = 0;
   if (!ishead(n)) {
     fprintf(stderr, "jrb_find_gte_str called on non-head 0x%x\n", n);
@@ -282,9 +241,9 @@ JRB jrb_find_gte_gen(JRB n, Jval key,int (*fxn)(Jval, Jval), int *fnd)
   cmp = (*fxn)(key, n->blink->key);
   if (cmp == 0) {
     *fnd = 1;
-    return n->blink; 
+    return n->blink;
   }
-  if (cmp > 0) return n; 
+  if (cmp > 0) return n;
   else n = n->parent;
   while (1) {
     if (isext(n)) return n;
@@ -296,7 +255,7 @@ JRB jrb_find_gte_gen(JRB n, Jval key,int (*fxn)(Jval, Jval), int *fnd)
     if (cmp < 0) n = n->flink ; else n = n->blink;
   }
 }
- 
+
 JRB jrb_find_gen(JRB n, Jval key, int (*fxn)(Jval, Jval))
 {
   int fnd;
@@ -305,11 +264,11 @@ JRB jrb_find_gen(JRB n, Jval key, int (*fxn)(Jval, Jval))
   j = jrb_find_gte_gen(n, key, fxn, &fnd);
   if (fnd) return j; else return NULL;
 }
- 
+
 static JRB jrb_insert_b(JRB n, Jval key, Jval val)
 {
   JRB newleft, newright, newnode, list, p;
- 
+
   if (ishead(n)) {
     if (n->parent == n) {         /* Tree is empty */
       mk_new_ext(newnode, key, val);
@@ -335,30 +294,30 @@ static JRB jrb_insert_b(JRB n, Jval key, Jval val)
     mk_new_int(newleft, n, n->parent, isleft(n));
     p = lprev(newleft);
     if (!ishead(p)) setrext(p, newleft);
-    return newleft;    
+    return newleft;
   }
 }
- 
+
 static void recolor(JRB n)
-{  
+{
   JRB p, gp, s;
   int done = 0;
- 
+
   while(!done) {
     if (isroot(n)) {
       setblack(n);
       return;
     }
- 
+
     p = n->parent;
- 
+
     if (isblack(p)) return;
-    
+
     if (isroot(p)) {
       setblack(p);
       return;
     }
- 
+
     gp = p->parent;
     s = sibling(p);
     if (isred(s)) {
@@ -371,7 +330,7 @@ static void recolor(JRB n)
     }
   }
   /* p's sibling is black, p is red, gp is black */
-  
+
   if ((isleft(n) == 0) == (isleft(p) == 0)) {
     single_rotate(gp, isleft(n));
     setblack(p);
@@ -383,35 +342,35 @@ static void recolor(JRB n)
     setred(gp);
   }
 }
- 
+
 static void single_rotate(JRB y, int l)
 {
   int rl, ir;
   JRB x, yp;
   char *tmp;
- 
+
   ir = isroot(y);
   yp = y->parent;
   if (!ir) {
     rl = isleft(y);
   }
-  
+
   if (l) {
     x = y->flink;
     y->flink = x->blink;
     setleft(y->flink);
     y->flink->parent = y;
     x->blink = y;
-    setright(y);  
+    setright(y);
   } else {
     x = y->blink;
     y->blink = x->flink;
     setright(y->blink);
     y->blink->parent = y;
     x->flink = y;
-    setleft(y);  
+    setleft(y);
   }
- 
+
   x->parent = yp;
   y->parent = x;
   if (ir) {
@@ -428,12 +387,12 @@ static void single_rotate(JRB y, int l)
     }
   }
 }
-    
+
 void jrb_delete_node(JRB n)
 {
   JRB s, p, gp;
   char ir;
- 
+
   if (isint(n)) {
     fprintf(stderr, "Cannot delete an internal node: 0x%x\n", n);
     exit(1);
@@ -448,7 +407,7 @@ void jrb_delete_node(JRB n)
     p->parent = p;
     free(n);
     return;
-  } 
+  }
   s = sibling(n);    /* The only node after deletion */
   if (isroot(p)) {
     s->parent = p->parent;
@@ -470,9 +429,9 @@ void jrb_delete_node(JRB n)
   ir = isred(p);
   free(p);
   free(n);
-  
+
   if (isext(s)) {      /* Update proper rext and lext values */
-    p = lprev(s); 
+    p = lprev(s);
     if (!ishead(p)) setrext(p, s);
     p = rprev(s);
     if (!ishead(p)) setlext(p, s);
@@ -487,15 +446,15 @@ void jrb_delete_node(JRB n)
     setblack(s);
     return;
   }
- 
+
   if (ir) return;
- 
+
   /* Recolor */
-  
+
   n = s;
   p = n->parent;
   s = sibling(n);
-  while(isblack(p) && isblack(s) && isint(s) && 
+  while(isblack(p) && isblack(s) && isint(s) &&
         isblack(s->flink) && isblack(s->blink)) {
     setred(s);
     n = p;
@@ -503,25 +462,25 @@ void jrb_delete_node(JRB n)
     p = n->parent;
     s = sibling(n);
   }
-  
+
   if (isblack(p) && isred(s)) {  /* Rotation 2.3b */
     single_rotate(p, isright(n));
     setred(p);
     setblack(s);
     s = sibling(n);
   }
-    
+
   { JRB x, z; char il;
-    
+
     if (isext(s)) {
       fprintf(stderr, "DELETION ERROR: sibling not internal\n");
       exit(1);
     }
- 
+
     il = isleft(n);
     x = il ? s->flink : s->blink ;
     z = sibling(x);
- 
+
     if (isred(z)) {  /* Rotation 2.3f */
       single_rotate(p, !il);
       setblack(z);
@@ -549,8 +508,8 @@ void jrb_delete_node(JRB n)
     }
   }
 }
- 
- 
+
+
 void jrb_print_tree(JRB t, int level)
 {
   int i;
@@ -562,47 +521,47 @@ void jrb_print_tree(JRB t, int level)
   } else {
     if (isext(t)) {
       for (i = 0; i < level; i++) putchar(' ');
-      printf("Ext node 0x%x: %c,%c: p=0x%x, k=%s\n", 
+      printf("Ext node 0x%x: %c,%c: p=0x%x, k=%s\n",
               t, isred(t)?'R':'B', isleft(t)?'l':'r', t->parent, t->key.s);
     } else {
       jrb_print_tree(t->flink, level+2);
       jrb_print_tree(t->blink, level+2);
       for (i = 0; i < level; i++) putchar(' ');
-      printf("Int node 0x%x: %c,%c: l=0x%x, r=0x%x, p=0x%x, lr=(%s,%s)\n", 
-              t, isred(t)?'R':'B', isleft(t)?'l':'r', t->flink, 
-              t->blink, 
+      printf("Int node 0x%x: %c,%c: l=0x%x, r=0x%x, p=0x%x, lr=(%s,%s)\n",
+              t, isred(t)?'R':'B', isleft(t)?'l':'r', t->flink,
+              t->blink,
               t->parent, getlext(t)->key.s, getrext(t)->key.s);
     }
   }
 }
- 
+
 void jrb_iprint_tree(JRB t, int level)
 {
   int i;
   if (ishead(t) && t->parent == t) {
     printf("tree 0x%x is empty\n", t);
   } else if (ishead(t)) {
-    printf("Head: 0x%x.  Root = 0x%x, < = 0x%x, > = 0x%x\n", 
+    printf("Head: 0x%x.  Root = 0x%x, < = 0x%x, > = 0x%x\n",
             t, t->parent, t->blink, t->flink);
     jrb_iprint_tree(t->parent, 0);
   } else {
     if (isext(t)) {
       for (i = 0; i < level; i++) putchar(' ');
-      printf("Ext node 0x%x: %c,%c: p=0x%x, <=0x%x, >=0x%x k=%d\n", 
-              t, isred(t)?'R':'B', isleft(t)?'l':'r', t->parent, 
+      printf("Ext node 0x%x: %c,%c: p=0x%x, <=0x%x, >=0x%x k=%d\n",
+              t, isred(t)?'R':'B', isleft(t)?'l':'r', t->parent,
               t->blink, t->flink, t->key.i);
     } else {
       jrb_iprint_tree(t->flink, level+2);
       jrb_iprint_tree(t->blink, level+2);
       for (i = 0; i < level; i++) putchar(' ');
-      printf("Int node 0x%x: %c,%c: l=0x%x, r=0x%x, p=0x%x, lr=(%d,%d)\n", 
-              t, isred(t)?'R':'B', isleft(t)?'l':'r', t->flink, 
-              t->blink, 
+      printf("Int node 0x%x: %c,%c: l=0x%x, r=0x%x, p=0x%x, lr=(%d,%d)\n",
+              t, isred(t)?'R':'B', isleft(t)?'l':'r', t->flink,
+              t->blink,
               t->parent, getlext(t)->key.i, getrext(t)->key.i);
     }
   }
 }
-      
+
 int jrb_nblack(JRB n)
 {
   int nb;
@@ -618,7 +577,7 @@ int jrb_nblack(JRB n)
   }
   return nb;
 }
- 
+
 int jrb_plength(JRB n)
 {
   int pl;
@@ -634,25 +593,25 @@ int jrb_plength(JRB n)
   }
   return pl;
 }
- 
+
 void jrb_free_tree(JRB n)
 {
   if (!ishead(n)) {
     fprintf(stderr, "ERROR: Rb_free_tree called on a non-head node\n");
     exit(1);
   }
- 
+
   while(jrb_first(n) != jrb_nil(n)) {
     jrb_delete_node(jrb_first(n));
   }
   free(n);
 }
- 
+
 Jval jrb_val(JRB n)
 {
   return n->val;
 }
- 
+
 static JRB jrb_insert_a(JRB nd, Jval key, Jval val)
 {
   return jrb_insert_b(nd->flink, key, val);
@@ -687,10 +646,8 @@ JRB jrb_insert_dbl(JRB tree, double dkey, Jval val)
 
 JRB jrb_insert_gen(JRB tree, Jval key, Jval val,
                           int (*func)(Jval, Jval))
-{ 
+{
   int fnd;
 
   return jrb_insert_b(jrb_find_gte_gen(tree, key, func, &fnd), key, val);
 }
-
-

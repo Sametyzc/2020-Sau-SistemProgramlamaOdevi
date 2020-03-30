@@ -28,6 +28,14 @@ typedef struct input_struct {
   int jump_count; /*Her sicramada bir artirilacak degisken*/
 } *Properties;
 
+typedef struct tree_node {
+  int Child_Count;//Kac cocuga sahip oldugunu belirten degisken
+  struct tree_node *Child_Nodes;//Cocuklarin listesini tutan dizi
+  struct tree_node *Parent;//Suan bulunan nodun parentini gosteren degisken
+  struct player_struct *Player;//Suanki node icindeki playeri gosteren degisken
+  int Level;//Node ne kadar derinlikte oldugunu gosterir
+} *Tree;
+
 //Argumanlari tutan global degisken
 extern Properties properties;
 
@@ -36,6 +44,9 @@ extern Dllist allPlayers;
 
 //Yapilan toplam iyilestirmeyi tutan global deger
 int totalHealing;
+
+//Agacın baslangic noktasini gosteren degisken
+extern Tree Head;
 
 //Verilen node icerisindeki player_structi dondurur.
 #define Get_Player_In_Node(node) (((Player)jval_v(node->val)))
@@ -52,8 +63,10 @@ int totalHealing;
 //Verilen playeri jvala donunturur
 #define Player_to_Jval(Player) (new_jval_v(Player))
 
-//Lokman Hekim'e en yakın insanı getirir.
-#define Get_Closest_Person() (Get_Player_In_Node(dll_first( all_players_in_range(Get_Player_In_Node(dll_first(allPlayers))))))
+//Verilen node dan baslayarak heade dogru tarama yapan ifade
+#define tree_scan_to_head(itr, tree) \
+for (itr = tree->Parent; itr->Parent != NULL; itr = itr->Parent)
+
 /*
 Parametre olarak aldığı IS içerisinden okuyacağı oyuncu bilgilerini
 kullanarak Player olusturup bu playerleri bir listeye ekleyip
@@ -117,6 +130,19 @@ return range deki playerlari iceren Dllist
 extern Dllist all_players_in_range(Player);//Samet
 
 /*
+Parametre olarak verilen listenin icerisinde kac node oldugunu bulan fonksiyon
+1.Parametre icinde kac tane node oldugu bilinmek istenen liste
+return listenin node sayisi int olarak geri dondurulur
+*/
+extern int get_node_count_in_list(Dllist);//Samet
+
+/*
+Parametre olarak gelen dugumun icerisindeki playerin atlayabilecegi playerlarin listesini dondurur
+1.Parametre bakilmak istenen dugum
+return playerlari iceren listeyi dondurur
+*/
+extern Dllist get_jumpable_players(Tree);//Samet
+/*
 İyileştirmenin en verimli olduğu yolu bulan fonksiyon
 */
 extern void find_best_way();//Yoruk
@@ -161,5 +187,14 @@ diger free fonksiyonlari bunun icerisinde cagirilabilir
 */
 extern void free_oyun();//Alperen
 
+
+/*          TREE         */
+
+extern void create_tree();
+
+extern void insert_tree(Tree, int);
+
+//oyun icin gerekli fonksiyon cagirilarinin yapildigi yer
+extern void start_game(int, int, int, int, double);
 
 #endif

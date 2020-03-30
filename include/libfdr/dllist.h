@@ -31,8 +31,8 @@ extern Jval dll_val(Dllist);
 #define dll_nil(d) (d)
 
 #define dll_traverse(ptr, list) \
-  for (ptr = list->flink; ptr != list; ptr = ptr->flink)
+for (ptr = list->flink; ptr != list; ptr = ptr->flink)
 #define dll_rtraverse(ptr, list) \
-  for (ptr = list->blink; ptr != list; ptr = ptr->blink)
+for (ptr = list->blink; ptr != list; ptr = ptr->blink)
 
 #endif

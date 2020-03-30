@@ -2,6 +2,7 @@
 
 Properties properties;
 Dllist allPlayers;
+Tree Head;
 
 Dllist read_file()	//Kubra
 {
@@ -64,6 +65,7 @@ Player create_player(int coordinate_x, int coordinate_y, int current_pp, int max
 	new_player->Max_PP = max_pp;
 	new_player->Name = strdup(name);
 	new_player->Turn = turn;
+
 	printf("-Yeni player degerleri ->\n");
 	printf("Name: %s\n", new_player->Name);
 	printf("Coordinate_X: %d\n", new_player->Coordinate_X);
@@ -123,6 +125,56 @@ Dllist all_players_in_range(Player p_reference)	//Samet
 	return playersList;
 }
 
+Dllist get_jumpable_players(Tree Node)
+{
+	printf("-get_jumpable_players calismaya basladi\n");
+	Tree itr_tree;
+	Dllist itr_list;
+	Dllist rangeList = all_players_in_range(Node->Player);
+	Dllist playersList = new_dllist();
+	dll_traverse(itr_list, rangeList)
+	{
+		Player itr_player = Get_Player_In_Node(itr_list);
+		printf("--tree_scan_to_head calismaya basladi\n");
+		int i =0;
+		int isParent=0;
+		tree_scan_to_head(itr_tree,Node)
+		{
+			printf("%d--- iterasyon basladi\n", i);
+			//printf("--- '%s' isimli oyuncu '%s' isimli oyuncu ile karsilastiriliyor\n",(itr_tree->Player)->Name, itr_player->Name);
+			if(strcmp((itr_tree->Player)->Name, itr_player->Name) == 0)
+			{
+				isParent = 1;
+				break;
+				printf("%d---- iterasyonda %s isimli oyuncu parent olarak bulundu\n", i,itr_player->Name);
+			}
+			printf("%d--- iterasyon bitti\n", i);
+			i++;
+		}
+		if(isParent==0)
+		{
+			printf("%d--- iterasyonda listeye '%s' isimli oyuncu eklendi \n", i,itr_player->Name);
+			dll_append(playersList, itr_list->val);
+		}
+		printf("--tree_scan_to_head calismayi bitirdi\n");
+	}
+	free(rangeList);
+	printf("-get_jumpable_players calismayi bitirdi\n\n");
+	//Donus degeri new ile olusturuldugu icin cagirildigi yerde free ile serbest birakilmali
+	return playersList;
+}
+
+int get_node_count_in_list(Dllist list)//Samet
+{
+	int nodeCount=0;
+	Dllist itr;
+	dll_traverse(itr, list)
+	{
+		nodeCount++;
+	}
+	return nodeCount + 1;
+}
+
 int chainCounter = 0;
 int way_one = 0, way_two = 0;
 int temp_current_power = 0;
@@ -136,17 +188,16 @@ void find_best_way()	//Yoruk
 		//Lokman Hekim'in canı tam ise
 		if (Get_Player_In_Node(dll_first(allPlayers))->Current_PP == Get_Player_In_Node(dll_first(allPlayers))->Max_PP)
 		{
-			heal_player(Get_Closest_Person());
+			//heal_player(Get_Closest_Person());
 		}
 		else
 		{
-			heal_player(Get_Player_In_Node(ptr));
+			//heal_player(Get_Player_In_Node(ptr));
 		}
 	}
 	printf("%d\n", way_one);
 	printf("%d\n", properties->current_power);
 	free(range);
-
 }
 
 void heal_player(Player player)	//Yoruk
@@ -157,7 +208,6 @@ void heal_player(Player player)	//Yoruk
 		update_totalHealing(player->Max_PP - player->Current_PP, 0);
 		else
 		{
-
 			update_totalHealing(properties->initial_power, 0);
 		}
 	}
@@ -186,3 +236,87 @@ void free_allPlayers(){}	//Alperen
 void free_properties(){}	//Alperen
 
 void free_oyun(){}	//Alperen
+
+
+/*        		Tree             */
+
+void create_tree()
+{
+
+	Dllist rangeList=all_players_in_range(Get_Player_In_Node(dll_first(allPlayers)));
+
+	Tree head;
+	head = (Tree) malloc (sizeof(struct tree_node));
+	head->Parent=NULL;
+	head->Player=NULL;
+	head->Level=0;
+	head->Child_Count=get_node_count_in_list(rangeList);
+
+	printf("-- head Child_Count :%d\n", head->Child_Count);
+	head->Child_Nodes=(Tree) malloc (head->Child_Count*sizeof(struct tree_node));
+	int i=1;
+	Dllist itr;
+	((head->Child_Nodes))->Level=1;
+	((head->Child_Nodes))->Parent=head;
+	((head->Child_Nodes))->Player=Get_Player_In_Node(dll_first(allPlayers));
+	insert_tree((head->Child_Nodes),1);
+	dll_traverse(itr, rangeList)
+	{
+		((head->Child_Nodes)+i)->Level=1;
+		((head->Child_Nodes)+i)->Parent=head;
+		((head->Child_Nodes)+i)->Player=Get_Player_In_Node(itr);
+		insert_tree(((head->Child_Nodes)+i),1);
+		i++;
+	}
+	Head = head;
+	free(rangeList);
+}
+
+void insert_tree(Tree Node,int Level)
+{
+	properties->jump_count++;
+
+	printf("--level :%d\n", Level);
+	if(Level==properties->num_jumps)
+	{
+		printf("----Seviye sinirina geldi-----\n\n");
+		return;
+	}
+	Level++;
+
+	Dllist rangeList=get_jumpable_players(Node);
+	Node->Child_Count=get_node_count_in_list(rangeList);
+	printf("--Child_Count :%d\n", Node->Child_Count);
+	if(Node->Child_Count==0)
+	{
+		printf("----Atlamak icin cocuk kalmadi-----\n\n");
+		return;
+	}
+
+	printf("-insert_tree '%s' icin calismaya basladi\n",Node->Player->Name);
+
+	Node->Child_Nodes=(Tree) malloc (Node->Child_Count*sizeof(struct tree_node));
+
+	int i=0;
+	Dllist itr;
+
+	printf("--- dll_traverse calismaya basladi\n");
+	dll_traverse(itr, rangeList)
+	{
+		printf("---%s oyuncusunun %d inci cocugu -> %s\n", Node->Player->Name,i,Get_Player_In_Node(itr)->Name);
+		((Node->Child_Nodes)+i)->Level=Level;
+		((Node->Child_Nodes)+i)->Parent=Node;
+		((Node->Child_Nodes)+i)->Player=Get_Player_In_Node(itr);
+		insert_tree((Node->Child_Nodes)+i,Level);
+		i++;
+	}
+	printf("-insert_tree calismayi bitidi\n\n");
+	free(rangeList);
+}
+
+void start_game(int initialRange, int jumpRange, int numJumps, int initialPower, double powerReduction)
+{
+	create_properties(initialRange,jumpRange,numJumps,initialPower,powerReduction);
+	read_file();
+	create_tree();
+}
