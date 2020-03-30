@@ -1,4 +1,4 @@
-#include "oyun.h"
+#include "game.h"
 
 Properties properties;
 Dllist allPlayers;
@@ -130,10 +130,11 @@ int temp_current_power = 0;
 void find_best_way()	//Yoruk
 {
 	Dllist ptr;
-	/* dll_traverse(ptr,all_players_in_range(Get_Player_In_Node(dll_first(allPlayers->flink))))
+	Dllist range = all_players_in_range(Get_Player_In_Node(dll_first(allPlayers)));
+	dll_traverse(ptr,range)
 	{
 		//Lokman Hekim'in canı tam ise
-		if (Get_Player_In_Node(dll_first(allPlayers->flink))->Current_PP == Get_Player_In_Node(dll_first(allPlayers->flink))->Max_PP)
+		if (Get_Player_In_Node(dll_first(allPlayers))->Current_PP == Get_Player_In_Node(dll_first(allPlayers))->Max_PP)
 		{
 			heal_player(Get_Closest_Person());
 		}
@@ -144,7 +145,7 @@ void find_best_way()	//Yoruk
 	}
 	printf("%d\n", way_one);
 	printf("%d\n", properties->current_power);
-	*/
+	free(range);
 
 }
 
@@ -153,7 +154,7 @@ void heal_player(Player player)	//Yoruk
 	if (chainCounter == 0)
 	{
 		if (player->Max_PP - player->Current_PP <= properties->initial_power)
-			update_totalHealing(player->Max_PP - player->Current_PP, 0);
+		update_totalHealing(player->Max_PP - player->Current_PP, 0);
 		else
 		{
 
@@ -180,8 +181,8 @@ void update_totalHealing(int value, int value2)	//Yoruk
 
 void free_player(Player player) {}	//Alperen
 
-void free_allPlayers(){}	//Alperen 
+void free_allPlayers(){}	//Alperen
 
-void free_properties(){}	//Alperen 
+void free_properties(){}	//Alperen
 
-void free_oyun(){}	//Alperen 
+void free_oyun(){}	//Alperen
