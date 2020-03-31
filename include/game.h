@@ -74,13 +74,13 @@ listeyi donduren fonksiyon
 1.Parametre Dosyayı iceren fields.h in icerisindeki IS structi
 return Butun playerlari iceren Dllist
 */
-extern Dllist read_file();//Kubra
+extern Dllist read_file();
 
 /*
 Properties global degiskenine set eden fonksiyon
 1.Parametre create_properties() fonksiyonundan donen deger atanabilir
 */
-extern void set_properties(Properties);//Kubra
+extern void set_properties(Properties);
 
 /*
 Argumanlar okunduktan sonra malloc ile properties structi olusturan fonksiyon
@@ -91,12 +91,12 @@ return olusturulan properties dondurulur
 4.Parametre initial_power
 5.Parametre power_reduction
 */
-extern Properties create_properties(int,int,int,int,double);//Kubra
+extern Properties create_properties(int,int,int,int,double);
 
 /*
 dosya okunduktan sonra allPlayers global degiskenini set eden fonksiyon
 */
-extern void set_allPlayers();//Kubra
+extern void set_allPlayers();
 
 /*
 Verilen parametrelere uygun olarak player olusturup donduren fonksiyon
@@ -105,86 +105,96 @@ Verilen parametrelere uygun olarak player olusturup donduren fonksiyon
 3.Parametre Current_PP
 4.Parametre Max_PP
 5.Parametre Name
-6.Parametre Turn
 */
-extern Player create_player(int,int,int,int,char[],int);//Samet
+extern Player create_player(int,int,int,int,char[]);
 
 /* Verilen playerin ne kadar pp ye ihtiyac duydugunu hesaplayan fonksiyon
 1.Parametre Hesap yapilmak istenen player
 return Gerekli olan PP nin sayisal degeri
 */
-extern int get_required_pp(Player);//Samet
+extern int get_required_pp(Player);
 
 /* Bir playerin jump_rangede olup olmadigini dondurecek fonksiyon
 1.Parametre Suan iyilestirme sirasi 1 olan player
 2.Parametre Range olup olmadigina bakilacak player
 return 0 false 1 true olarak dondurulecek
 */
-extern int is_player_in_range(Player,Player);//Samet
+extern int is_player_in_range(Player,Player);
 
 /*
 Verilen playerin range indeki playerlarin listesini donduren fonksiyon
 1.Parametre Referans player
 return range deki playerlari iceren Dllist
 */
-extern Dllist all_players_in_range(Player);//Samet
+extern Dllist all_players_in_range(Player);
 
 /*
 Parametre olarak verilen listenin icerisinde kac node oldugunu bulan fonksiyon
 1.Parametre icinde kac tane node oldugu bilinmek istenen liste
 return listenin node sayisi int olarak geri dondurulur
 */
-extern int get_node_count_in_list(Dllist);//Samet
+extern int get_node_count_in_list(Dllist);
 
 /*
 Parametre olarak gelen dugumun icerisindeki playerin atlayabilecegi playerlarin listesini dondurur
 1.Parametre bakilmak istenen dugum
 return playerlari iceren listeyi dondurur
 */
-extern Dllist get_jumpable_players(Tree);//Samet
+extern Dllist get_jumpable_players(Tree);
 /*
 İyileştirmenin en verimli olduğu yolu bulan fonksiyon
 */
-extern void find_best_way();//Yoruk
+extern void find_best_way();
 
 /*
 playeri Properties goz onune alinarak simüle etme
 1.Parametre iyilestirme yapilacak player
 */
-extern void Simulate(Player,int);//Yoruk
+extern void Simulate(Player,int);
 
 extern void Heal(Player,int);
 
+//oyun icin gerekli fonksiyon cagirilarinin yapildigi yer
+extern void start_game(int, int, int, int, double);
+
+/*          TREE         */
+
+/*
+Bir agac olusturup ilk deger atamasini ve cocuk atamasini yapan fonksiyon
+*/
+extern void create_tree();
+
+/*
+Agacin icerisine yinelemeli olarak cocuk ekleyen fonksiyon
+*/
+extern void insert_tree(Tree, int);
+
+/*
+mumkun olan yollari bulup ekrana yazdiran fonksiyon
+*/
+extern void print_ways();
+
+/*      		Free             */
 
 /*
 Parametre olarak gonderilen oyuncunun heapteki alanlarini ve kendisini serbest birakan fonksiyon
 */
-extern void free_player(Player);//Alperen
+extern void free_player(Player);
 
 /*
 global degisken olan allPlayers listesinin icerisindeki playerlari ve en son listeyi serbest birakan fonksiyon
 */
-extern void free_allPlayers();//Alperen
+extern void free_allPlayers();
 
 /*
-global degisken olan properties structini serbest birakan fonksiyon
+agaci serbest birakan fonksiyon
 */
-extern void free_properties();//Alperen
+extern void free_tree(Tree);
 
 /*
 oyun kutuphanesi iceriside heapte olusturulmus her seyi serbest birakan fonksiyon
 diger free fonksiyonlari bunun icerisinde cagirilabilir
 */
-extern void free_oyun();//Alperen
-
-
-/*          TREE         */
-
-extern void create_tree();
-
-extern void insert_tree(Tree, int);
-
-//oyun icin gerekli fonksiyon cagirilarinin yapildigi yer
-extern void start_game(int, int, int, int, double);
+extern void free_game();
 
 #endif
