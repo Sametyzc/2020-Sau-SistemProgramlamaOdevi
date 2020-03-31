@@ -42,28 +42,25 @@ extern Properties properties;
 //Butun oyuncuları tutan global liste
 extern Dllist allPlayers;
 
+//Cocogu olmayan agac dugumlerini tutan liste
+extern Dllist allChildlessTreeNodes;
+
 //Yapilan toplam iyilestirmeyi tutan global deger
 int totalHealing;
 
-//Agacın baslangic noktasini gosteren degisken
-extern Tree Head;
-
-//Verilen node icerisindeki player_structi dondurur.
+//Verilen liste node icerisindeki player_structi dondurur.
 #define Get_Player_In_Node(node) (((Player)jval_v(node->val)))
 
-//Player structu olusturup jval.void olarak atayan ifade
-#define Create_Player_As_Jval() (new_jval_v((struct player_struct*) malloc (1* sizeof(struct player_struct))))
-
-//Verilen Jval icerisindeki Playeri dondurur
-#define Get_Jval_As_Player(Jval) ((Player)jval_v(Jval))
+//Verilen liste node icerisindeki player_structi dondurur.
+#define Get_Tree_In_Node(node) (((Tree)jval_v(node->val)))
 
 //Malloc ile player tipinde yer ayrılır
 #define Malloc_Player() ((struct player_struct*) malloc (1* sizeof(struct player_struct)))
 
-//Verilen playeri jvala donunturur
-#define Player_to_Jval(Player) (new_jval_v(Player))
+//Malloc ile Tree tipinde yer ayrılır
+#define Malloc_Tree(number) ((struct tree_node*) malloc (number* sizeof(struct tree_node)))
 
-//Verilen node dan baslayarak heade dogru tarama yapan ifade
+//Verilen tree node dan baslayarak heade dogru tarama yapan ifade
 #define tree_scan_to_head(itr, tree) \
 for (itr = tree->Parent; itr->Parent != NULL; itr = itr->Parent)
 

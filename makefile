@@ -17,4 +17,4 @@ program:main.o fields.o dllist.o jrb.o jval.o game.o
 	gcc ./lib/libfdr/fields.o ./lib/libfdr/jrb.o ./lib/libfdr/jval.o ./lib/libfdr/dllist.o ./lib/main.o ./lib/game.o -o ./bin/program -lm
 
 calistir:
-	./bin/program 2 1 4 500 0.25 < ./doc/Oyuncu_Bilgileri.txt
+	./bin/program 1 2 4 500 0.25 < ./doc/Oyuncu_Bilgileri.txt
