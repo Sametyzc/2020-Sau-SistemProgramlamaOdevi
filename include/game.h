@@ -64,6 +64,9 @@ int totalHealing;
 #define tree_scan_to_head(itr, tree) \
 for (itr = tree->Parent; itr->Parent != NULL; itr = itr->Parent)
 
+#define tree_scan_to_head2(itr, tree) \
+for (itr = tree; itr->Parent != NULL; itr = itr->Parent)
+
 /*
 Parametre olarak aldığı IS içerisinden okuyacağı oyuncu bilgilerini
 kullanarak Player olusturup bu playerleri bir listeye ekleyip
@@ -145,23 +148,13 @@ extern Dllist get_jumpable_players(Tree);//Samet
 extern void find_best_way();//Yoruk
 
 /*
-playeri Properties goz onune alinarak iyitestiren fonksiyon
+playeri Properties goz onune alinarak simüle etme
 1.Parametre iyilestirme yapilacak player
-iyilestirme yapildiktan sonra properties degerleri guncellenmeli
 */
-extern void heal_player(Player);//Yoruk
+extern void Simulate(Player,int);//Yoruk
 
-/*
-iyilestirme yaptiktan sonra properties icerisindeki current_power degerini
-guncellemek icin kullanilan fonksiyon
-*/
-extern void update_power();//Yoruk
+extern void Heal(Player,int);
 
-/*
-Oyun boyunca yapilan toplam iyilestirmeyi tutan totalHealing degerini iyilestirme yaptiktan sonra update eden fonksiyon
-1.Parametre totalHealing e eklenecek olan deger
-*/
-extern void update_totalHealing(int,int);//Yoruk
 
 /*
 Parametre olarak gonderilen oyuncunun heapteki alanlarini ve kendisini serbest birakan fonksiyon
