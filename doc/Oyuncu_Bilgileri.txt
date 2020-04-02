@@ -1,6 +1,0 @@
-0 0 50 100 Lokman_Hekim
-0 1 0 300 Husni_the_Police
-1 1 50 400 Adam_the_Warrior
-1 2 150 600 Catherine_the_Great
-2 3 0 1000 Chad_the_Priest
-3 2 400 600 James_the_Lightning_Lord

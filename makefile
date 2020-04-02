@@ -12,7 +12,7 @@ main.o:
 	gcc -I "./include/libfdr" -I "./include" -c ./src/main.c -o ./lib/main.o
 
 program:main.o fields.o dllist.o jval.o game.o
-	gcc ./lib/libfdr/fields.o ./lib/libfdr/jval.o ./lib/libfdr/dllist.o ./lib/main.o ./lib/game.o -o ./bin/program -lm
+	gcc ./lib/libfdr/fields.o ./lib/libfdr/jval.o ./lib/libfdr/dllist.o ./lib/main.o ./lib/game.o -o ./bin/chain_heal -lm
 
 calistir:
-	./bin/program 1 1 2 1500 0.25 < ./doc/Oyuncu_Bilgileri.txt
+	./bin/chain_heal 2 1 4 500 0.25 < ./doc/small.txt

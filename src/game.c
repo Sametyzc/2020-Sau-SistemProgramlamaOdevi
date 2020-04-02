@@ -9,24 +9,22 @@ Dllist read_file()
 	allPlayers = new_dllist();
 	IS is;
 	is = new_inputstruct(NULL);
-	if (is == NULL)
-	{
+	if (is == NULL) {
 		perror("Dosya okunurken hata olustu!");
 		exit(1);
 	}
-	while (get_line(is) > 0)
-	{
+	while (get_line(is) > 0) {
 		Player new_player;
 		new_player = create_player(atoi(is->fields[0]), atoi(is->fields[1]), atoi(is->fields[2]), atoi(is->fields[3]), is->fields[4]);
 		dll_append(allPlayers, new_jval_v(new_player));
 	}
-//jettison_inputstruct(is);
+	//jettison_inputstruct(is);
 	return allPlayers;
 }
 
 Properties create_properties(int initialRange, int jumpRange, int numJumps, int initialPower, double powerReduction)
 {
-	properties = (struct input_struct *) malloc(1* sizeof(struct input_struct));
+	properties = (struct input_struct*)malloc(1 * sizeof(struct input_struct));
 	properties->initial_range = initialRange;
 	properties->jump_range = jumpRange;
 	properties->num_jumps = numJumps;
@@ -37,7 +35,7 @@ Properties create_properties(int initialRange, int jumpRange, int numJumps, int 
 	return properties;
 }
 
-Player create_player(int coordinate_x, int coordinate_y, int current_pp, int max_pp, char *name)
+Player create_player(int coordinate_x, int coordinate_y, int current_pp, int max_pp, char* name)
 {
 	Player new_player;
 	new_player = Malloc_Player();
@@ -58,17 +56,15 @@ int is_player_in_range(Player p_reference, Player p_target)
 {
 	int coordinate_x = abs(p_reference->Coordinate_X - p_target->Coordinate_X);
 	int coordinate_y = abs(p_reference->Coordinate_Y - p_target->Coordinate_Y);
-	double distance = sqrt(pow((double) coordinate_x, (double) 2) + pow((double) coordinate_y, (double) 2));
-	if (properties->jump_count == 0)
-	{
+	double distance = sqrt(pow((double)coordinate_x, (double)2) + pow((double)coordinate_y, (double)2));
+	if (properties->jump_count == 0) {
 		if (distance <= properties->initial_range)
 		{
 			return 1;
 		}
 		return 0;
 	}
-	else
-	{
+	else {
 		if (distance <= properties->jump_range)
 		{
 			return 1;
@@ -110,15 +106,13 @@ Dllist get_jumpable_players(Tree Node)
 		isParent = 0;
 		tree_scan_to_head(itr_tree, Node)
 		{
-			if (strcmp((itr_tree->Player)->Name, itr_player->Name) == 0)
-			{
+			if (strcmp((itr_tree->Player)->Name, itr_player->Name) == 0) {
 				isParent = 1;
 				break;
 			}
 			i++;
 		}
-		if (isParent == 0)
-		{
+		if (isParent == 0) {
 			dll_append(playersList, itr_list->val);
 		}
 	}
@@ -129,8 +123,7 @@ Dllist get_jumpable_players(Tree Node)
 
 int get_node_count_in_list(Dllist list)
 {
-	if (list->flink == list)
-	{
+	if (list->flink == list) {
 		return 0;
 	}
 	int nodeCount = 0;
@@ -146,10 +139,12 @@ int get_node_count_in_list(Dllist list)
 double healvalue = 0;
 double totalheal = 0;
 double temp = 0;
+Dllist Data;
 /**/
 
 void find_best_way()
 {
+	Data = new_dllist();
 	Tree node_tree;
 	Dllist ptr;
 	Tree ptr2;
@@ -159,56 +154,66 @@ void find_best_way()
 	healvalue = properties->current_power;
 	dll_traverse(ptr, allChildlessTreeNodes)
 	{
-
 		node_tree = Get_Tree_In_Node(ptr);
-
 		tree_scan_to_head2(ptr2, node_tree)
 		{
-
 			Simulate(ptr2->Player, ptr2->Level - 1);
 		}
 		if (totalheal > wayheal)
 		{
 			wayheal = totalheal;
-
 			waycounter = counter;
 		}
-
 		totalheal = 0;
 		counter++;
 	}
-	printf("\nEn iyi yol :%d. yol\n", waycounter);
-	printf("\nEn iyi yol iyileştirmesi :%d\n", wayheal);
+	printf("\nEn iyi yol :%d. yol\n\n", waycounter);
+
 	ptr = allChildlessTreeNodes->flink;
+
 	for (int j = 1; j < waycounter; j++)
 	ptr = ptr->flink;
+
 	node_tree = Get_Tree_In_Node(ptr);
+
 	tree_scan_to_head2(ptr2, node_tree)
 	{
-		printf("\n%s  ", ptr2->Player->Name);
+
 		Heal(ptr2->Player, ptr2->Level - 1);
 	}
+	int healvalue = 0, counter2 = 0;
+	dll_rtraverse(ptr, Data)
+	{
+		if (counter2 == 0)
+		{
+			healvalue = jval_i(ptr->val);
+			counter2++;
+		}
+		else
+		{
+			printf("%s %d\n", jval_s(ptr->val), healvalue);
+			counter2--;
+		}
+	}
+	printf("\nEn iyi yol iyileştirmesi :%d\n", wayheal);
 }
 
 void Simulate(Player player, int count)
 {
-
 	if (count == 0)
 	healvalue = properties->initial_power;
 	else
 	{
-		healvalue = (properties->initial_power) *pow(1 - properties->power_reduction, count);
+		healvalue = (properties->initial_power) * pow(1 - properties->power_reduction, count);
 		healvalue = rint(healvalue);
 	}
 
 	if (get_required_pp(player) != 0 && get_required_pp(player) < healvalue)
 	{
-
 		totalheal += get_required_pp(player);
 	}
 	else if (get_required_pp(player) != 0)
 	{
-
 		totalheal += healvalue;
 	}
 }
@@ -219,32 +224,44 @@ void Heal(Player player, int count)
 	healvalue = properties->initial_power;
 	else
 	{
-		healvalue = (properties->initial_power) *pow(1 - properties->power_reduction, count);
+		healvalue = (properties->initial_power) * pow(1 - properties->power_reduction, count);
 		healvalue = rint(healvalue);
 	}
-
+	dll_append(Data, new_jval_s(player->Name));
 	if (get_required_pp(player) != 0 && get_required_pp(player) < healvalue)
 	{
-		printf("%f\n", rint(get_required_pp(player)));
+		dll_append(Data, new_jval_i(rint(get_required_pp(player))));
 		totalheal += get_required_pp(player);
 		player->Current_PP = player->Max_PP;
 	}
 	else if (get_required_pp(player) != 0)
 	{
-
-		printf(" %f\n", rint(healvalue));
+		dll_append(Data, new_jval_i(rint(healvalue)));
 		totalheal += healvalue;
 		player->Current_PP += healvalue;
 	}
-	else printf(" %d\n", 0);
-
+	else
+	{
+		dll_append(Data, new_jval_i(0));
+	}
 }
 
 /*      		Tree             */
 
 void create_tree()
 {
-	Dllist rangeList = all_players_in_range(Get_Player_In_Node(dll_first(allPlayers)));
+	Dllist itr;
+	Player Lokman_Hekim;
+	dll_traverse(itr,allPlayers)
+	{
+		Lokman_Hekim=Get_Player_In_Node(itr);
+		if(strcmp("Lokman_Hekim",Lokman_Hekim->Name) == 0)
+		{
+			break;
+		}
+	}
+
+	Dllist rangeList = all_players_in_range(Lokman_Hekim);
 	allChildlessTreeNodes = new_dllist();
 
 	Tree head;
@@ -258,10 +275,10 @@ void create_tree()
 	head->Child_Nodes = Malloc_Tree(head->Child_Count);
 
 	int i = 1;
-	Dllist itr;
+
 	((head->Child_Nodes))->Level = 1;
 	((head->Child_Nodes))->Parent = head;
-	((head->Child_Nodes))->Player = Get_Player_In_Node(dll_first(allPlayers));
+	((head->Child_Nodes))->Player = Lokman_Hekim;
 	insert_tree((head->Child_Nodes), 1);
 
 	dll_traverse(itr, rangeList)
@@ -272,7 +289,6 @@ void create_tree()
 		insert_tree(((head->Child_Nodes) + i), 1);
 		i++;
 	}
-	Head=head;
 	free_dllist(rangeList);
 }
 
@@ -280,8 +296,7 @@ void insert_tree(Tree Node, int Level)
 {
 	properties->jump_count++;
 
-	if (Level == properties->num_jumps)
-	{
+	if (Level == properties->num_jumps) {
 		dll_append(allChildlessTreeNodes, new_jval_v(Node));
 		return;
 	}
@@ -354,39 +369,40 @@ void free_player(Player player)
 
 void free_allPlayers()
 {
-
+	Dllist itr;
+	dll_traverse(itr,allPlayers)
+	{
+		free_player(Get_Player_In_Node(itr));
+	}
+	free_dllist(allPlayers);
 }
 
 void free_tree(Tree Node)
 {
 	Tree Parent;
-	if(Node->Parent!=NULL)
-	{
-	 	Parent = Node->Parent;
+	if (Node->Parent != NULL) {
+		Parent = Node->Parent;
 	}
-	else
-	{
+	else {
 		free(Node);
 		return;
 	}
-	for(int i = 0;i<Parent->Child_Count;i++)
-	{
-		if((((Parent->Child_Nodes)+i)->Child_Count)!=0)
-		{
-			free_tree(((Parent->Child_Nodes)+i)->Child_Nodes);
+	for (int i = 0; i < Parent->Child_Count; i++) {
+		if ((((Parent->Child_Nodes) + i)->Child_Count) != 0) {
+			free_tree(((Parent->Child_Nodes) + i)->Child_Nodes);
 			return;
 		}
 	}
 	free(Parent->Child_Nodes);
-	Parent->Child_Count=0;
+	Parent->Child_Count = 0;
 	free_tree(Parent);
 }
 
 void free_game()
 {
 	free_tree(Get_Tree_In_Node(dll_first(allChildlessTreeNodes)));
-
-
+	free_allPlayers();
+	free_dllist(Data);
 	free(properties);
 	free_dllist(allChildlessTreeNodes);
 }

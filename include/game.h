@@ -9,32 +9,31 @@
 #include "fields.h"
 
 typedef struct player_struct {
-  int Coordinate_X;
-  int Coordinate_Y;
-  int Current_PP;
-  int Max_PP;
-  char* Name;
-  int Turn;/*iyilesmeyi sektirecek kisiyi gosterir 1 ve ya 0 olabilir baslangicta sira Lokmanda olmali*/
-} *Player;
+    int Coordinate_X;
+    int Coordinate_Y;
+    int Current_PP;
+    int Max_PP;
+    char* Name;
+} * Player;
 
 //Program calistirildiginda verilen argumanlari tutan struct
 typedef struct input_struct {
-  int initial_range;
-  int jump_range;
-  int num_jumps;
-  int initial_power;
-  double power_reduction;
-  int current_power;/*Sahip olunan suanki guc baslangicta initial_power a esit olmali*/
-  int jump_count; /*Her sicramada bir artirilacak degisken*/
-} *Properties;
+    int initial_range;
+    int jump_range;
+    int num_jumps;
+    int initial_power;
+    double power_reduction;
+    int current_power; /*Sahip olunan suanki guc baslangicta initial_power a esit olmali*/
+    int jump_count; /*Her sicramada bir artirilacak degisken*/
+} * Properties;
 
 typedef struct tree_node {
-  int Child_Count;//Kac cocuga sahip oldugunu belirten degisken
-  struct tree_node *Child_Nodes;//Cocuklarin listesini tutan dizi
-  struct tree_node *Parent;//Suan bulunan nodun parentini gosteren degisken
-  struct player_struct *Player;//Suanki node icindeki playeri gosteren degisken
-  int Level;//Node ne kadar derinlikte oldugunu gosterir
-} *Tree;
+    int Child_Count; //Kac cocuga sahip oldugunu belirten degisken
+    struct tree_node* Child_Nodes; //Cocuklarin listesini tutan dizi
+    struct tree_node* Parent; //Suan bulunan nodun parentini gosteren degisken
+    struct player_struct* Player; //Suanki node icindeki playeri gosteren degisken
+    int Level; //Node ne kadar derinlikte oldugunu gosterir
+} * Tree;
 
 //Argumanlari tutan global degisken
 extern Properties properties;
@@ -45,9 +44,6 @@ extern Dllist allPlayers;
 //Cocogu olmayan agac dugumlerini tutan liste
 extern Dllist allChildlessTreeNodes;
 
-//Yapilan toplam iyilestirmeyi tutan global deger
-int totalHealing;
-
 //Verilen liste node icerisindeki player_structi dondurur.
 #define Get_Player_In_Node(node) (((Player)jval_v(node->val)))
 
@@ -55,17 +51,17 @@ int totalHealing;
 #define Get_Tree_In_Node(node) (((Tree)jval_v(node->val)))
 
 //Malloc ile player tipinde yer ayrılır
-#define Malloc_Player() ((struct player_struct*) malloc (1* sizeof(struct player_struct)))
+#define Malloc_Player() ((struct player_struct*)malloc(1 * sizeof(struct player_struct)))
 
 //Malloc ile Tree tipinde yer ayrılır
-#define Malloc_Tree(number) ((struct tree_node*) malloc (number* sizeof(struct tree_node)))
+#define Malloc_Tree(number) ((struct tree_node*)malloc(number * sizeof(struct tree_node)))
 
 //Verilen tree node dan baslayarak heade dogru tarama yapan ifade
 #define tree_scan_to_head(itr, tree) \
-for (itr = tree->Parent; itr->Parent != NULL; itr = itr->Parent)
+for(itr = tree->Parent; itr->Parent != NULL; itr = itr->Parent)
 
 #define tree_scan_to_head2(itr, tree) \
-for (itr = tree; itr->Parent != NULL; itr = itr->Parent)
+for(itr = tree; itr->Parent != NULL; itr = itr->Parent)
 
 /*
 Parametre olarak aldığı IS içerisinden okuyacağı oyuncu bilgilerini
@@ -91,7 +87,7 @@ return olusturulan properties dondurulur
 4.Parametre initial_power
 5.Parametre power_reduction
 */
-extern Properties create_properties(int,int,int,int,double);
+extern Properties create_properties(int, int, int, int, double);
 
 /*
 dosya okunduktan sonra allPlayers global degiskenini set eden fonksiyon
@@ -106,7 +102,7 @@ Verilen parametrelere uygun olarak player olusturup donduren fonksiyon
 4.Parametre Max_PP
 5.Parametre Name
 */
-extern Player create_player(int,int,int,int,char[]);
+extern Player create_player(int, int, int, int, char[]);
 
 /* Verilen playerin ne kadar pp ye ihtiyac duydugunu hesaplayan fonksiyon
 1.Parametre Hesap yapilmak istenen player
@@ -116,10 +112,10 @@ extern int get_required_pp(Player);
 
 /* Bir playerin jump_rangede olup olmadigini dondurecek fonksiyon
 1.Parametre Suan iyilestirme sirasi 1 olan player
-2.Parametre Range olup olmadigina bakilacak player
+2.Parametre Rangede olup olmadigina bakilacak player
 return 0 false 1 true olarak dondurulecek
 */
-extern int is_player_in_range(Player,Player);
+extern int is_player_in_range(Player, Player);
 
 /*
 Verilen playerin range indeki playerlarin listesini donduren fonksiyon
@@ -141,6 +137,7 @@ Parametre olarak gelen dugumun icerisindeki playerin atlayabilecegi playerlarin 
 return playerlari iceren listeyi dondurur
 */
 extern Dllist get_jumpable_players(Tree);
+
 /*
 İyileştirmenin en verimli olduğu yolu bulan fonksiyon
 */
@@ -150,9 +147,9 @@ extern void find_best_way();
 playeri Properties goz onune alinarak simüle etme
 1.Parametre iyilestirme yapilacak player
 */
-extern void Simulate(Player,int);
+extern void Simulate(Player, int);
 
-extern void Heal(Player,int);
+extern void Heal(Player, int);
 
 //oyun icin gerekli fonksiyon cagirilarinin yapildigi yer
 extern void start_game(int, int, int, int, double);
